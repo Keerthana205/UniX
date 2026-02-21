@@ -60,18 +60,20 @@
 </button>
 
     </section>
-
+<div class="request-tabs">
+  <button class="tab-btn active" data-tab="available">Available</button>
+  <button class="tab-btn" data-tab="mine">My Requests</button>
+</div>
     <!-- 📄 Main Content -->
     <section class="skills-main">
 
   <!-- LEFT COLUMN -->
   <div class="requests-feed">
 
-  <!-- ========================= -->
-  <!-- AVAILABLE REQUESTS -->
-  <!-- ========================= -->
 
-  <h2 class="section-title">Available Requests</h2>
+   <div id="availableSection" class="tab-content active">
+  <!-- available cards -->
+    <h2 class="section-title">Available Requests</h2>
 
   <div class="request-card improved" data-state="open">
 
@@ -109,13 +111,11 @@
     </div>
 
   </div>
+</div>
 
-
-  <!-- ========================= -->
-  <!-- MY REQUESTS -->
-  <!-- ========================= -->
-
-  <h2 class="section-title my-section">My Requests</h2>
+<div id="mySection" class="tab-content">
+  <!-- my request cards -->
+    <h2 class="section-title my-section">My Requests</h2>
 
   <div class="request-card my-request expanded">
 
@@ -141,7 +141,7 @@
 
       <div class="application-row">
         <div class="applicant-info">
-          <strong>Aditya</strong>
+          <strong>User1</strong>
           <span class="rating-mini">
             <i class="fa-solid fa-star"></i> 4.9
           </span>
@@ -156,6 +156,9 @@
     </div>
 
   </div>
+</div>
+
+ 
 
 </div>
   <!-- RIGHT COLUMN -->
@@ -167,26 +170,35 @@
         <i class="fa-solid fa-trophy"></i>
         <h4>Weekly Leaderboard</h4>
       </div>
+<div class="leaderboard-list" id="leaderboardList">
 
-      <div class="leaderboard-list">
-        <div class="leader-item first">
-          <span class="rank">1</span>
-          <span class="name">Aditya</span>
-          <span class="points">320 pts</span>
-        </div>
+  <!-- Always visible top 3 -->
+  <div class="leader-item first"><span class="rank">1</span>
+      <a href="profile.html?uid=user4" class="leader-name">User1</a>
+      <span class="points">500 pts</span></div>
+  <div class="leader-item second"><span class="rank">2</span>
+      <a href="profile.html?uid=user4" class="leader-name">User2</a>
+      <span class="points">480 pts</span></div>
+  <div class="leader-item third"><span class="rank">3</span>
+      <a href="profile.html?uid=user4" class="leader-name">User3</a>
+      <span class="points">280 pts</span></div>
 
-        <div class="leader-item second">
-          <span class="rank">2</span>
-          <span class="name">Nixon</span>
-          <span class="points">280 pts</span>
-        </div>
+  <!-- Hidden additional users -->
+  <div class="extra-leaders hidden">
+    <div class="leader-item">
+      <span class="rank">4</span>
+      <a href="profile.html?uid=user4" class="leader-name">User4</a>
+      <span class="points">180 pts</span>
+    </div>
 
-        <div class="leader-item third">
-          <span class="rank">3</span>
-          <span class="name">Keerthana</span>
-          <span class="points">210 pts</span>
-        </div>
-      </div>
+    <!-- Add up to 50 here dynamically -->
+  </div>
+
+</div>
+
+<button class="view-all-btn" id="toggleLeaderboard">
+  View All
+</button>
     </div>
 
     <!-- Badges -->
@@ -313,8 +325,7 @@ fetch("navbar.html")
   .then(data => {
     document.getElementById("navbar-container").innerHTML = data;
   });
-</script>
-<script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
   /* ==============================
@@ -326,10 +337,32 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeBtn = document.getElementById("closeModal");
   const cancelBtn = document.getElementById("cancelModal");
 
-  openBtn.onclick = () => modal.style.display = "flex";
-  closeBtn.onclick = () => modal.style.display = "none";
-  cancelBtn.onclick = () => modal.style.display = "none";
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", () => modal.style.display = "flex");
+  }
 
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => modal.style.display = "none");
+  }
+
+  if (cancelBtn && modal) {
+    cancelBtn.addEventListener("click", () => modal.style.display = "none");
+  }
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+
+    document.querySelectorAll(".tab-btn")
+      .forEach(b => b.classList.remove("active"));
+
+    document.querySelectorAll(".tab-content")
+      .forEach(c => c.classList.remove("active"));
+
+    btn.classList.add("active");
+    document.getElementById(
+      btn.dataset.tab === "available" ? "availableSection" : "mySection"
+    ).classList.add("active");
+  });
+});
   /* ==============================
      CHARACTER COUNTER
   =============================== */
@@ -337,9 +370,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const desc = document.getElementById("requestDesc");
   const charCount = document.getElementById("charCount");
 
-  desc.addEventListener("input", () => {
-    charCount.textContent = desc.value.length + " / 300";
-  });
+  if (desc && charCount) {
+    desc.addEventListener("input", () => {
+      charCount.textContent = desc.value.length + " / 300";
+    });
+  }
 
   /* ==============================
      REWARD CALCULATION
@@ -350,6 +385,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const difficulty = document.getElementById("difficulty");
 
   function updateReward() {
+    if (!slider || !urgency || !difficulty) return;
+
     let base = parseInt(slider.value);
     let bonus = 0;
 
@@ -361,9 +398,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("totalPoints").textContent = base + bonus;
   }
 
-  slider.addEventListener("input", updateReward);
-  urgency.addEventListener("change", updateReward);
-  difficulty.addEventListener("change", updateReward);
+  if (slider) slider.addEventListener("input", updateReward);
+  if (urgency) urgency.addEventListener("change", updateReward);
+  if (difficulty) difficulty.addEventListener("change", updateReward);
 
   updateReward();
 
@@ -371,18 +408,15 @@ document.addEventListener("DOMContentLoaded", function () {
      APPLY BUTTON LOGIC
   =============================== */
 
-  document.querySelectorAll(".request-card").forEach(card => {
+  document.querySelectorAll(".request-card[data-state]").forEach(card => {
 
     const button = card.querySelector(".apply-btn");
+    if (!button) return;
+
     const state = card.dataset.state;
 
-    if (state === "applied") {
-      setApplied(button);
-    }
-
-    if (state === "closed") {
-      setClosed(button);
-    }
+    if (state === "applied") setApplied(button);
+    if (state === "closed") setClosed(button);
 
     button.addEventListener("click", function () {
 
@@ -391,9 +425,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       setApplied(button);
       showToast("🎉 Applied Successfully! +2 XP");
-
     });
-
   });
 
   function setApplied(button) {
@@ -412,17 +444,20 @@ document.addEventListener("DOMContentLoaded", function () {
      SUBMIT REQUEST
   =============================== */
 
-  document.getElementById("submitRequest").onclick = function () {
+  const submitBtn = document.getElementById("submitRequest");
 
-    if (desc.value.length < 20) {
-      alert("Description must be at least 20 characters.");
-      return;
-    }
+  if (submitBtn) {
+    submitBtn.addEventListener("click", function () {
 
-    modal.style.display = "none";
-    showToast("🎉 Request Created! +5 XP");
+      if (!desc || desc.value.length < 20) {
+        alert("Description must be at least 20 characters.");
+        return;
+      }
 
-  };
+      if (modal) modal.style.display = "none";
+      showToast("🎉 Request Created! +5 XP");
+    });
+  }
 
   /* ==============================
      TOAST
@@ -430,6 +465,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function showToast(message) {
     const toast = document.getElementById("toast");
+    if (!toast) return;
+
     toast.textContent = message;
     toast.style.display = "block";
 
@@ -437,6 +474,11 @@ document.addEventListener("DOMContentLoaded", function () {
       toast.style.display = "none";
     }, 2500);
   }
+  const params = new URLSearchParams(window.location.search);
+const userId = params.get("uid");
+
+// Fetch that user from Firebase using userId
+console.log("Load profile for:", userId);
 
 });
 </script>
