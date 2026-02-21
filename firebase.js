@@ -1,16 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "unix-ef51b.firebaseapp.com",
-  projectId: "unix-ef51b",
-  storageBucket: "unix-ef51b.firebasestorage.app",
-  messagingSenderId: "1019754921400",
-  appId: "1:1019754921400:web:e2052a5aac03eb3f87e34d"
+  apiKey: "AIzaSyDQEhPKUc3ONpTHWpkombGJ_LOozkLPM3w",
+  authDomain: "unix-56a13.firebaseapp.com",
+  projectId: "unix-56a13",
+  storageBucket: "unix-56a13.firebasestorage.app",
+  messagingSenderId: "592543532512",
+  appId: "1:592543532512:web:493768bdfad69dfb955785"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { auth };
+export { auth, db };
