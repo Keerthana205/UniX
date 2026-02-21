@@ -39,6 +39,15 @@
         required
       >
 
+      <label>Email</label>
+      <input 
+        type="email" 
+        id="email"
+        name="email"
+        placeholder="Enter your email"
+        required
+      >
+
       <label>Role</label>
       <select id="role">
         <option>Student</option>
@@ -61,87 +70,117 @@
   </div>
 
 
-  <script>
-    const form = document.getElementById("registerForm");
-    const roleSelect = document.getElementById("role");
-    const dynamicField = document.getElementById("dynamicField");
+  <script type="module">
+  import { auth } from "./firebase.js";
 
-    function renderField() {
-      const role = roleSelect.value;
+  import { 
+    createUserWithEmailAndPassword,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-      if (role === "Student") {
-        dynamicField.innerHTML = `
-          <label>Register Number</label>
-          <input
-            type="text"
-            id="regNo"
-            placeholder="eg:- CEC23CS078"
-            required
-          >
-        `;
-      } else {
-        dynamicField.innerHTML = `
-          <label>Campus Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="your.name@CEC.clg"
-            required
-          >
-          <small class="auth-note">
-            Must be a @CEC.clg email address
-          </small>
-        `;
+  import { 
+    getFirestore,
+    doc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  const db = getFirestore();
+
+  const form = document.getElementById("registerForm");
+  const roleSelect = document.getElementById("role");
+  const dynamicField = document.getElementById("dynamicField");
+
+  function renderField() {
+    if (roleSelect.value === "Student") {
+      dynamicField.innerHTML = `
+        <label>Register Number</label>
+        <input type="text" id="regNo" placeholder="eg:- CEC23CS078" required>
+      `;
+    } else {
+      dynamicField.innerHTML = "";
+    }
+  }
+
+  renderField();
+  roleSelect.addEventListener("change", renderField);
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const role = roleSelect.value;
+
+    // Email validation (for both roles)
+   // Basic email format check (for everyone)
+const generalEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!generalEmailPattern.test(email)) {
+  alert("Enter a valid email address");
+  return;
+}
+
+// Additional restriction only for Faculty
+if (role === "Faculty") {
+  const facultyPattern = /^[a-zA-Z0-9._%+-]+@cec\.clg$/i;
+
+  if (!facultyPattern.test(email)) {
+    alert("Faculty must use a valid @cec.clg email address");
+    return;
+  }
+}
+
+    // Student register number validation
+    let regNo = null;
+    if (role === "Student") {
+      regNo = document.getElementById("regNo").value.toUpperCase();
+      const regPattern = /^CEC[0-9]{2}(CS|EC|AD|EE)[0-9]{3}$/;
+
+      if (!regPattern.test(regNo)) {
+        alert("Invalid Register Number (Example: CEC23CS078)");
+        return;
       }
     }
 
-    // Initial render
-    renderField();
+    // Password validation
+    const passwordValid =
+      password.length >= 6 &&
+      /[0-9]/.test(password) &&
+      /[a-zA-Z]/.test(password) &&
+      /[!@#$%^&*]/.test(password);
 
-    // Update field when role changes
-    roleSelect.addEventListener("change", renderField);
+    if (!passwordValid) {
+      alert("Password must contain letters, numbers & special characters");
+      return;
+    }
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      const name = document.getElementById("name").value.trim();
-      const password = document.getElementById("password").value;
-      const role = roleSelect.value;
+      // Save name in Firebase Auth
+      await updateProfile(user, {
+        displayName: name
+      });
 
-      // Password validation
-      const passwordValid =
-        password.length >= 6 &&
-        /[0-9]/.test(password) &&
-        /[a-zA-Z]/.test(password)&&
-        /[!@#$%^&*]/.test(password);
+      // Save user in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        role,
+        regNo: regNo || null,
+        createdAt: new Date()
+      });
 
-      if (!passwordValid) {
-        alert("Password must contain special characters, letters and numbers");
-        return;
-      }
-
-      if (role === "Student") {
-        const regNo = document.getElementById("regNo").value.toUpperCase();
-        const regPattern = /^CEC[0-9]{2}(CS|EC|AD|EE)[0-9]{3}$/;
-
-        if (!regPattern.test(regNo)) {
-          alert("Enter valid register number (Example: CEC23CS078)");
-          return;
-        }
-      } else {
-        const email = document.getElementById("email").value.trim();
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@CEC\.clg$/;
-
-        if (!emailPattern.test(email)) {
-          alert("Email must be a valid @CEC.clg address");
-          return;
-        }
-      }
-
-      // If everything is valid
       window.location.href = "dashboard.html";
-    });
-  </script>
+
+    } catch (error) {
+      console.log(error.code);
+      alert("Registration failed. Try another email.");
+    }
+  });
+</script>
 
 </body>
 </html>
