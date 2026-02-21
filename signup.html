@@ -166,12 +166,20 @@ if (role === "Faculty") {
 
       // Save user in Firestore
       await setDoc(doc(db, "users", user.uid), {
-        name,
-        email,
-        role,
-        regNo: regNo || null,
-        createdAt: new Date()
-      });
+  name,
+  email,
+  role,
+  regNo: regNo || null,
+  points: 1000,
+  createdAt: new Date()
+});
+
+// Create welcome notification
+await setDoc(doc(db, "users", user.uid, "notifications", "welcome"), {
+  message: "🎉 Welcome to UniX! You earned 1000 points.",
+  createdAt: new Date(),
+  read: false
+});
 
       window.location.href = "dashboard.html";
 

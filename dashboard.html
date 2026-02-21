@@ -13,95 +13,177 @@
 </head>
 
 <body>
-    <div class="layout">
+  <div class="layout">
     <div id="navbar-container"></div>
 
     <div class="page-content">
-        <div class="dashboard">
+      <div class="dashboard">
 
-        <h1>Welcome back, Keerthana!</h1>
+        <h1 id="welcomeText">Welcome back!</h1>
+
         <p class="subtitle">
-            Here's what's happening in your campus community
+          Here's what's happening in your campus community
         </p>
 
-        
+        <!-- Notification Box -->
+        <div id="notificationBox" class="notification-box" style="display:none;"></div>
+
         <!-- Points Card -->
         <div class="points-card">
-            <div>
+          <div>
             <p>Your Points</p>
-            <h2><i class="fa-solid fa-coins"></i> 1000</h2>
+            <h2>
+              <i class="fa-solid fa-coins"></i>
+              <span id="dashboardPointsValue">0</span>
+            </h2>
             <small>Earn more by helping your peers</small>
-            </div>
+          </div>
         </div>
 
         <!-- Stats Row -->
         <div class="stats-row">
-
-            <div class="stat-card">
+          <div class="stat-card">
             <div class="stat-left">
-                <div class="stat-icon purple">
+              <div class="stat-icon purple">
                 <i class="fa-solid fa-user-group"></i>
-                </div>
-                <div class="stat-text">
+              </div>
+              <div class="stat-text">
                 <h4>Open Requests</h4>
                 <p>Help requests waiting for you</p>
-                </div>
+              </div>
             </div>
             <div class="stat-value">
-                <h2>0</h2>
+              <h2>0</h2>
             </div>
-            </div>
+          </div>
 
-            <div class="stat-card">
+          <div class="stat-card">
             <div class="stat-left">
-                <div class="stat-icon green">
+              <div class="stat-icon green">
                 <i class="fa-solid fa-shop"></i>
-                </div>
-                <div class="stat-text">
+              </div>
+              <div class="stat-text">
                 <h4>Active Listings</h4>
                 <p>Items available for trade</p>
-                </div>
+              </div>
             </div>
             <div class="stat-value">
-                <h2>0</h2>
+              <h2>0</h2>
             </div>
-            </div>
+          </div>
 
-            <div class="stat-card">
+          <div class="stat-card">
             <div class="stat-left">
-                <div class="stat-icon yellow">
+              <div class="stat-icon yellow">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <div class="stat-text">
+              </div>
+              <div class="stat-text">
                 <h4>Lost Items</h4>
                 <p>Waiting to be found</p>
-                </div>
+              </div>
             </div>
             <div class="stat-value">
-                <h2>0</h2>
+              <h2>0</h2>
             </div>
-            </div>
-
+          </div>
         </div>
 
         <!-- Recent Section -->
         <div class="recent-section">
-            <h2>Recent Transactions</h2>
-            <div class="recent-box">
+          <h2>Recent Transactions</h2>
+          <div class="recent-box">
             No transactions yet. Start exchanging skills to see your history!
-            </div>
+          </div>
         </div>
 
-
-        </div>
+      </div>
     </div>
-</div>
-<script>
+  </div>
+
+  <script type="module">
+  import { auth, db } from "./firebase.js";
+  import { onAuthStateChanged, signOut } 
+    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+  import { doc, getDoc, collection, getDocs, updateDoc } 
+    from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+  // Load navbar first
   fetch("navbar.html")
     .then(res => res.text())
-    .then(data => {
+    .then(async (data) => {
+
       document.getElementById("navbar-container").innerHTML = data;
       setActiveLink();
+
+      const logoutBtn = document.getElementById("logoutBtn");
+      const usernameValue = document.getElementById("usernameValue");
+      const navPointsValue = document.getElementById("navPointsValue");
+      const dashboardPointsValue = document.getElementById("dashboardPointsValue");
+      const welcomeText = document.getElementById("welcomeText");
+      const notificationBox = document.getElementById("notificationBox");
+
+      onAuthStateChanged(auth, async (user) => {
+
+        if (!user) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+
+            // Update username
+            if (usernameValue) usernameValue.innerText = data.name || "User";
+
+            // Update welcome text
+            if (welcomeText) {
+              welcomeText.innerText = `Welcome back, ${data.name || "User"}!`;
+            }
+
+            // Update points everywhere
+            const points = data.points ?? 0;
+
+            if (navPointsValue) navPointsValue.innerText = points;
+            if (dashboardPointsValue) dashboardPointsValue.innerText = points;
+          }
+
+          // Fetch notifications
+          const notifRef = collection(db, "users", user.uid, "notifications");
+          const notifSnap = await getDocs(notifRef);
+
+          notifSnap.forEach(async (docSnap) => {
+            const notif = docSnap.data();
+
+            if (!notif.read && notificationBox) {
+              notificationBox.innerText = notif.message;
+              notificationBox.style.display = "block";
+
+              await updateDoc(docSnap.ref, { read: true });
+
+              setTimeout(() => {
+                notificationBox.style.display = "none";
+              }, 5000);
+            }
+          });
+
+        } catch (error) {
+          console.error("Dashboard error:", error);
+        }
+      });
+
+      // Logout
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          await signOut(auth);
+          window.location.href = "home.html";
+        });
+      }
+
     });
 
   function setActiveLink() {
@@ -120,4 +202,3 @@
 
 </body>
 </html>
-
