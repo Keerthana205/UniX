@@ -767,13 +767,13 @@ body {
   grid-template-columns: 2.3fr 0.9fr; /* 70% / 30% */
   gap: 40px;
   align-items: start;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 .skills-sidebar {
   display: flex;
   flex-direction: column;
-  border: 2px solid red;
+  /* border: 2px solid red; */
   gap: 24px;
 }
 .requests-feed {
@@ -1239,4 +1239,154 @@ body {
   display: grid;
   grid-template-columns: 2.3fr 0.9fr; /* tighter sidebar */
   gap: 50px;
+}
+/* ===============================
+   SECTION TITLES
+================================= */
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 35px 0 15px;
+}
+
+/* ===============================
+   MY REQUEST CARD
+================================= */
+
+.my-request .request-status {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #ede9fe;
+  color: #6a5af9;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.applications-count {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* ===============================
+   APPLICATION CARD
+================================= */
+
+.application-card {
+  background: white;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  transition: 0.3s ease;
+}
+
+.application-card:hover {
+  transform: translateY(-3px);
+}
+
+.applicant-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating-mini {
+  font-size: 13px;
+  color: #facc15;
+}
+
+.application-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.accept-btn {
+  background: #10b981;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.accept-btn:hover {
+  background: #059669;
+}
+
+.reject-btn {
+  background: #ef4444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.reject-btn:hover {
+  background: #dc2626;
+}
+/* =============================
+   MY REQUEST VISUAL SEPARATION
+============================= */
+
+.my-section {
+  margin-top: 45px;
+}
+
+.my-request {
+  border: 2px solid #ede9fe;
+  background: #faf9ff;
+}
+
+/* STATUS BADGE */
+
+.status-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-top: 6px;
+}
+
+.status-badge.open {
+  background: #ede9fe;
+  color: #6a5af9;
+}
+
+/* =============================
+   APPLICATIONS INSIDE CARD
+============================= */
+
+.applications-container {
+  margin-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 15px;
+}
+
+.application-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.rating-mini {
+  font-size: 13px;
+  color: #facc15;
+  margin-left: 6px;
+}
+
+.application-actions {
+  display: flex;
+  gap: 10px;
 }
