@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniX – Skills</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+<div class="layout">
+  <div id="navbar-container"></div>
+
+  <div class="page-content skills-page">
+
+    <!-- 🏆 Skill Dashboard Header -->
+    <section class="skill-dashboard">
+
+      <div class="level-box">
+        <h2>Level 3 – Campus Pro</h2>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 70%"></div>
+        </div>
+        <small>70% to Level 4</small>
+      </div>
+
+      <div class="stats-mini">
+        <div class="mini-card">
+          <i class="fa-solid fa-coins"></i>
+          <span>1000 Points</span>
+        </div>
+
+        <div class="mini-card">
+          🔥 3 Day Streak
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 🎯 Action Row -->
+    <section class="action-row">
+
+      <div class="left-actions">
+        <input type="text" placeholder="Search skills..." class="search-input" />
+
+        <select class="filter-select">
+          <option>All</option>
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+      </div>
+
+      <button class="primary-btn" id="openCreateModal">
+  <i class="fa-solid fa-plus"></i> Create Request
+</button>
+
+    </section>
+
+    <!-- 📄 Main Content -->
+    <section class="skills-main">
+
+  <!-- LEFT COLUMN -->
+  <div class="requests-feed">
+
+    <div class="request-card improved" data-state="open">
+
+      <div class="request-header">
+        <div>
+          <h3>Help me build portfolio website</h3>
+
+          <div class="creator">
+            <span class="creator-name">by Keerthana</span>
+
+            <div class="rating-box">
+              <span class="rating-value">
+                <i class="fa-solid fa-star"></i> 4.8
+              </span>
+              <div class="rating-bar">
+                <div class="rating-fill" style="width:96%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <span>Reward</span>
+          <strong>+40 pts</strong>
+        </div>
+      </div>
+
+      <div class="request-tags">
+        <span class="badge category">Programming</span>
+        <span class="badge medium">Medium</span>
+        <span class="badge high">High</span>
+      </div>
+
+      <div class="request-footer">
+        <button class="apply-btn">Apply to Help</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <aside class="skills-sidebar">
+
+    <!-- Leaderboard -->
+    <div class="sidebar-card premium">
+      <div class="card-header">
+        <i class="fa-solid fa-trophy"></i>
+        <h4>Weekly Leaderboard</h4>
+      </div>
+
+      <div class="leaderboard-list">
+        <div class="leader-item first">
+          <span class="rank">1</span>
+          <span class="name">Aditya</span>
+          <span class="points">320 pts</span>
+        </div>
+
+        <div class="leader-item second">
+          <span class="rank">2</span>
+          <span class="name">Nixon</span>
+          <span class="points">280 pts</span>
+        </div>
+
+        <div class="leader-item third">
+          <span class="rank">3</span>
+          <span class="name">Keerthana</span>
+          <span class="points">210 pts</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="sidebar-card premium">
+      <div class="card-header">
+        <i class="fa-solid fa-medal"></i>
+        <h4>Your Badges</h4>
+      </div>
+
+      <div class="badge-grid">
+        <span class="badge-chip">⚡ Fast Helper</span>
+        <span class="badge-chip">💻 Tech Wizard</span>
+        <span class="badge-chip">🌟 Community Star</span>
+      </div>
+    </div>
+
+    <!-- XP -->
+    <div class="sidebar-card premium">
+      <div class="card-header">
+        <i class="fa-solid fa-chart-line"></i>
+        <h4>Weekly XP</h4>
+      </div>
+
+      <div class="xp-box">
+        <div class="xp-value">+120 XP</div>
+        <div class="xp-progress">
+          <div class="xp-fill" style="width:60%"></div>
+        </div>
+        <small>60% to next milestone</small>
+      </div>
+    </div>
+
+  </aside>
+
+</section>
+
+    <!-- CREATE REQUEST MODAL -->
+<div class="modal-overlay" id="createModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h3>Create Help Request</h3>
+      <span class="close-modal" id="closeModal">&times;</span>
+    </div>
+
+    <label>Title</label>
+    <input type="text" id="requestTitle" placeholder="Need help with React project" />
+
+    <label>Description</label>
+    <textarea id="requestDesc" maxlength="300"
+      placeholder="Describe what you need help with..."></textarea>
+    <small id="charCount">0 / 300</small>
+
+    <div class="row-2">
+      <div>
+        <label>Category</label>
+        <select id="category">
+          <option>Programming</option>
+          <option>Design</option>
+          <option>Writing</option>
+          <option>Math</option>
+          <option>Science</option>
+          <option>Language</option>
+          <option>Music</option>
+          <option>Sports</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Difficulty</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div>
+        <label>Urgency</label>
+        <select id="urgency">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Deadline</label>
+        <input type="date" id="deadline">
+      </div>
+    </div>
+
+    <label>Points to Offer</label>
+    <input type="range" id="pointsSlider" min="10" max="200" value="50">
+
+    <div class="reward-preview">
+      <p>Base Points: <span id="basePoints">50</span></p>
+      <p>Urgency Bonus: <span id="bonusPoints">0</span></p>
+      <hr>
+      <p><strong>Total Reward: <span id="totalPoints">50</span></strong></p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="primary-btn" id="submitRequest">Create Request</button>
+      <button class="secondary-btn" id="cancelModal">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🎉 Request Created! +5 XP</div>
+
+  </div>
+</div>
+
+<script>
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar-container").innerHTML = data;
+  });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ==============================
+     MODAL LOGIC
+  =============================== */
+
+  const modal = document.getElementById("createModal");
+  const openBtn = document.getElementById("openCreateModal");
+  const closeBtn = document.getElementById("closeModal");
+  const cancelBtn = document.getElementById("cancelModal");
+
+  openBtn.onclick = () => modal.style.display = "flex";
+  closeBtn.onclick = () => modal.style.display = "none";
+  cancelBtn.onclick = () => modal.style.display = "none";
+
+  /* ==============================
+     CHARACTER COUNTER
+  =============================== */
+
+  const desc = document.getElementById("requestDesc");
+  const charCount = document.getElementById("charCount");
+
+  desc.addEventListener("input", () => {
+    charCount.textContent = desc.value.length + " / 300";
+  });
+
+  /* ==============================
+     REWARD CALCULATION
+  =============================== */
+
+  const slider = document.getElementById("pointsSlider");
+  const urgency = document.getElementById("urgency");
+  const difficulty = document.getElementById("difficulty");
+
+  function updateReward() {
+    let base = parseInt(slider.value);
+    let bonus = 0;
+
+    if (urgency.value === "high") bonus += Math.round(base * 0.1);
+    if (difficulty.value === "hard") bonus += Math.round(base * 0.2);
+
+    document.getElementById("basePoints").textContent = base;
+    document.getElementById("bonusPoints").textContent = bonus;
+    document.getElementById("totalPoints").textContent = base + bonus;
+  }
+
+  slider.addEventListener("input", updateReward);
+  urgency.addEventListener("change", updateReward);
+  difficulty.addEventListener("change", updateReward);
+
+  updateReward();
+
+  /* ==============================
+     APPLY BUTTON LOGIC
+  =============================== */
+
+  document.querySelectorAll(".request-card").forEach(card => {
+
+    const button = card.querySelector(".apply-btn");
+    const state = card.dataset.state;
+
+    if (state === "applied") {
+      setApplied(button);
+    }
+
+    if (state === "closed") {
+      setClosed(button);
+    }
+
+    button.addEventListener("click", function () {
+
+      if (button.classList.contains("applied") ||
+          button.classList.contains("closed")) return;
+
+      setApplied(button);
+      showToast("🎉 Applied Successfully! +2 XP");
+
+    });
+
+  });
+
+  function setApplied(button) {
+    button.textContent = "✔ Applied";
+    button.classList.add("applied");
+    button.disabled = true;
+  }
+
+  function setClosed(button) {
+    button.textContent = "Closed";
+    button.classList.add("closed");
+    button.disabled = true;
+  }
+
+  /* ==============================
+     SUBMIT REQUEST
+  =============================== */
+
+  document.getElementById("submitRequest").onclick = function () {
+
+    if (desc.value.length < 20) {
+      alert("Description must be at least 20 characters.");
+      return;
+    }
+
+    modal.style.display = "none";
+    showToast("🎉 Request Created! +5 XP");
+
+  };
+
+  /* ==============================
+     TOAST
+  =============================== */
+
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.style.display = "block";
+
+    setTimeout(() => {
+      toast.style.display = "none";
+    }, 2500);
+  }
+
+});
+</script>
+</body>
+</html>
