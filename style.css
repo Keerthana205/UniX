@@ -57,14 +57,16 @@ body {
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  padding: 8px 15px;
-  border-radius: 20px;
+  padding: 12px 22px;
+  border-radius: 25px;
   color: #6b7280;
   transition: 0.3s ease;
 }
 
 .login-btn:hover {
-  color: #6a5af9;
+  background: #f3f4f6;
+  color: #7c3aed;
+  transform: translateY(-1px);
 }
 
 .get-started-btn {
@@ -458,7 +460,17 @@ body {
 
 .navbar .profile-icon {
   text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 20px;
+  font-size: 15px;
+  font-weight: 500;
 }
+
+.navbar .profile-icon:hover {
+  background: #f3f4f6;
+  transition: 0.3s ease;
+}
+
 
 .navbar .logout-icon {
   text-decoration: none;
