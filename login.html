@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Your Auth CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+  <div class="auth-container">
+
+    <div class="auth-logo"></div>
+
+    <h2>Welcome Back</h2>
+    <p class="auth-subtext">Sign in to your UniX account</p>
+
+    <form class="auth-card" id="loginForm">
+
+      <label>Full Name</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="John Doe"
+        required
+      >
+
+      <label>Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter your password"
+        required
+      >
+
+      <button class="primary-btn" type="submit">
+        Sign In
+      </button>
+
+      <p class="auth-footer">
+        Don't have an account?
+        <a href="register.html">Create one</a>
+      </p>
+
+    </form>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const form = document.getElementById("loginForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const password = document.getElementById("password").value;
+
+      // Password rule
+      const passwordValid =
+        password.length >= 6 &&
+        /[0-9]/.test(password) &&
+        /[a-zA-Z]/.test(password);
+
+      if (!passwordValid) {
+        alert("Password must contain letters and numbers");
+        return;
+      }
+
+      // Temporary login success
+      window.location.href = "dashboard.html";
+    });
+  </script>
+
+</body>
+</html>

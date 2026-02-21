@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Register</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Auth CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+  <div class="auth-container">
+
+    <div class="auth-logo"></div>
+
+    <h2>Join UniX</h2>
+    <p class="auth-subtext">Create your campus account</p>
+
+    <form class="auth-card" id="registerForm">
+
+      <label>Full Name</label>
+      <input
+        type="text"
+        id="name"
+        placeholder="John Doe"
+        required
+      >
+
+      <label>Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Create a strong password"
+        required
+      >
+
+      <label>Role</label>
+      <select id="role">
+        <option>Student</option>
+        <option>Faculty</option>
+      </select>
+
+      <!-- Dynamic Fields Container -->
+      <div id="dynamicField"></div>
+
+      <button class="primary-btn" type="submit">
+        Create Account
+      </button>
+
+      <p class="auth-footer">
+        Already have an account?
+        <a href="login.html">Sign in</a>
+      </p>
+
+    </form>
+  </div>
+
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const roleSelect = document.getElementById("role");
+    const dynamicField = document.getElementById("dynamicField");
+
+    function renderField() {
+      const role = roleSelect.value;
+
+      if (role === "Student") {
+        dynamicField.innerHTML = `
+          <label>Register Number</label>
+          <input
+            type="text"
+            id="regNo"
+            placeholder="eg:- CEC23CS078"
+            required
+          >
+        `;
+      } else {
+        dynamicField.innerHTML = `
+          <label>Campus Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="your.name@CEC.clg"
+            required
+          >
+          <small class="auth-note">
+            Must be a @CEC.clg email address
+          </small>
+        `;
+      }
+    }
+
+    // Initial render
+    renderField();
+
+    // Update field when role changes
+    roleSelect.addEventListener("change", renderField);
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const password = document.getElementById("password").value;
+      const role = roleSelect.value;
+
+      // Password validation
+      const passwordValid =
+        password.length >= 6 &&
+        /[0-9]/.test(password) &&
+        /[a-zA-Z]/.test(password)&&
+        /[!@#$%^&*]/.test(password);
+
+      if (!passwordValid) {
+        alert("Password must contain special characters, letters and numbers");
+        return;
+      }
+
+      if (role === "Student") {
+        const regNo = document.getElementById("regNo").value.toUpperCase();
+        const regPattern = /^CEC[0-9]{2}(CS|EC|AD|EE)[0-9]{3}$/;
+
+        if (!regPattern.test(regNo)) {
+          alert("Enter valid register number (Example: CEC23CS078)");
+          return;
+        }
+      } else {
+        const email = document.getElementById("email").value.trim();
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@CEC\.clg$/;
+
+        if (!emailPattern.test(email)) {
+          alert("Email must be a valid @CEC.clg address");
+          return;
+        }
+      }
+
+      // If everything is valid
+      window.location.href = "dashboard.html";
+    });
+  </script>
+
+</body>
+</html>

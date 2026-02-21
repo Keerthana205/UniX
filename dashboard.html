@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Combined Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="layout">
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+        <div class="dashboard">
+
+        <h1>Welcome back, Keerthana!</h1>
+        <p class="subtitle">
+            Here's what's happening in your campus community
+        </p>
+
+        
+        <!-- Points Card -->
+        <div class="points-card">
+            <div>
+            <p>Your Points</p>
+            <h2><i class="fa-solid fa-coins"></i> 1000</h2>
+            <small>Earn more by helping your peers</small>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+
+            <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon purple">
+                <i class="fa-solid fa-user-group"></i>
+                </div>
+                <div class="stat-text">
+                <h4>Open Requests</h4>
+                <p>Help requests waiting for you</p>
+                </div>
+            </div>
+            <div class="stat-value">
+                <h2>0</h2>
+            </div>
+            </div>
+
+            <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon green">
+                <i class="fa-solid fa-shop"></i>
+                </div>
+                <div class="stat-text">
+                <h4>Active Listings</h4>
+                <p>Items available for trade</p>
+                </div>
+            </div>
+            <div class="stat-value">
+                <h2>0</h2>
+            </div>
+            </div>
+
+            <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon yellow">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="stat-text">
+                <h4>Lost Items</h4>
+                <p>Waiting to be found</p>
+                </div>
+            </div>
+            <div class="stat-value">
+                <h2>0</h2>
+            </div>
+            </div>
+
+        </div>
+
+        <!-- Recent Section -->
+        <div class="recent-section">
+            <h2>Recent Transactions</h2>
+            <div class="recent-box">
+            No transactions yet. Start exchanging skills to see your history!
+            </div>
+        </div>
+
+
+        </div>
+    </div>
+</div>
+<script>
+  fetch("navbar.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("navbar-container").innerHTML = data;
+      setActiveLink();
+    });
+
+  function setActiveLink() {
+    const currentPage = window.location.pathname
+      .split("/")
+      .pop()
+      .replace(".html", "");
+
+    document.querySelectorAll(".nav-links a").forEach(link => {
+      if (link.dataset.link === currentPage) {
+        link.classList.add("active");
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
+
